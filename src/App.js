@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 
+/* TO-TO:
+  - lägg till sökruta med knapp. Sökningen skall ta alla ord och göra till en queary sedan kalla på Fetch API - eventuellt med await. 
+  - Dölj och visa resultat tabell / bok-information - dölj och visa element från Workshop 3. 
+ */
+
 function ResultTable(props) {
   return (
     <React.Fragment>
       {props.data.map((book, index) => {
         return (
           <tr key={index} onClick={() => props.displayBook(index)}>
+            <td>{index + 1}</td>
             <td>{book.title}</td>
-            <td>{book.author_name}</td>
+            <td>{book.author_name[0]}</td>
             <td>{book.first_publish_year}</td>
           </tr>
         );
@@ -21,7 +27,7 @@ export default function App() {
   const [books, setBooks] = useState([]);
   const [title, setTitle] = useState([' hej']);
   const [activeBook, setActiveBook] = useState(null);
-  const query = 'react';
+  const query = 'Harry';
   const uri = `https://openlibrary.org/search.json?title=${query}`;
 
   console.log(uri);
@@ -29,7 +35,7 @@ export default function App() {
   useEffect(() => {
     fetch(uri)
       .then((response) => response.json())
-      .then((data) => setBooks(data.docs)); // Innehåller alla
+      .then((data) => setBooks(data.docs.slice(0, 30))); // Innehåller alla
   }, []);
 
   function displayBook(index) {
@@ -53,8 +59,33 @@ export default function App() {
               return <li>{publisher}</li>;
             })}
           </div>
-          <div>Available Languages:{props.book.language.join(', ')};</div>
-          <div>Subjects :{props.book.subject.join(', ')};</div>
+          <div>
+            Available Languages:{' '}
+            {props.book.language
+              ? props.book.language.join(', ')
+              : 'none available'}
+          </div>
+          <div>
+            Subjects :{' '}
+            {props.book.subject
+              ? props.book.subject.join(', ')
+              : 'none available'}
+          </div>
+          {/*    <img src={`https://www.cryptocompare.com/${this.state.cryImage}`} /> */}
+          <div>
+            Image:{' '}
+            {props.book.isbn ? (
+              <img
+                src={`https://covers.openlibrary.org/b/isbn/${props.book.isbn[0]}-M.jpg`}
+                alt="Girl in a jacket"
+              />
+            ) : (
+              'no image'
+            )}
+          </div>
+          {/* {console.log(
+            `https://covers.openlibrary.org/b/isbn/${props.book.isbn[0]}-M.jpg`
+          )} */}
         </div>
       );
   }
@@ -66,14 +97,10 @@ export default function App() {
       <BookDetails book={activeBook} />
       <table>
         <tr>
+          <th>Item </th>
           <th>Title </th>
           <th>Author</th>
           <th>First Publish Year</th>
-        </tr>
-        <tr>
-          <td>Eve</td>
-          <td>Jackson</td>
-          <td>94</td>
         </tr>
         <ResultTable data={books} displayBook={displayBook} />
       </table>
