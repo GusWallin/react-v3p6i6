@@ -11,7 +11,54 @@ th {
   border-color: black;
   border-width: 2px;
 }
+table > tr> td{
 
+  color: black;
+}
+table > tr:nth-child(n+2):hover {
+  background-color: lightgreen;
+  cursor: pointer;
+}
 .no-book {
   color: red;
+}
+
+.book-content{
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 10px;
+  background-color: bisque;
+  width: 900px;
+}
+
+.book-content > div {
+  background-color: #f1f1f1;
+  text-align: left;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 11px;
+
+}
+
+.book--image{
+  float: none;
+}
+.book--title{
+  font-size: 20px
+}
+
+img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 100px;
+}
+.book--publisher{
+
+  font-size: 10px;
+}
+.book--subjects{
+  font-size: 10px;
 }

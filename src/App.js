@@ -32,11 +32,11 @@ export default function App() {
 
   console.log(uri);
 
-  useEffect(() => {
+/*   useEffect(() => {
     fetch(uri)
       .then((response) => response.json())
       .then((data) => setBooks(data.docs.slice(0, 30))); // Innehåller alla
-  }, []);
+  }, []); */
 
   function displayBook(index) {
     console.log('index i displaybookfunction: ' + index);
@@ -49,31 +49,8 @@ export default function App() {
       return <div className="no-book">no book selected</div>;
     } else
       return (
-        <div>
-          <div>Name: {props.book.title}</div>
-          <div>Author:{props.book.author_name.join(' & ')}</div>
-          {/*     <div>Author alternative name:{props.book.author_alternative_name.join(' & ')}</div> */}
-          <div>
-            Publishers:
-            {props.book.publisher.map((publisher) => {
-              return <li>{publisher}</li>;
-            })}
-          </div>
-          <div>
-            Available Languages:{' '}
-            {props.book.language
-              ? props.book.language.join(', ')
-              : 'none available'}
-          </div>
-          <div>
-            Subjects :{' '}
-            {props.book.subject
-              ? props.book.subject.join(', ')
-              : 'none available'}
-          </div>
-          {/*    <img src={`https://www.cryptocompare.com/${this.state.cryImage}`} /> */}
-          <div>
-            Image:{' '}
+        <div className="book-content">
+          <div className="book--image">
             {props.book.isbn ? (
               <img
                 src={`https://covers.openlibrary.org/b/isbn/${props.book.isbn[0]}-M.jpg`}
@@ -83,19 +60,59 @@ export default function App() {
               'no image'
             )}
           </div>
-          {/* {console.log(
-            `https://covers.openlibrary.org/b/isbn/${props.book.isbn[0]}-M.jpg`
-          )} */}
+          <p className="book--title">Title: {props.book.title}</p>
+          <p>Author:{props.book.author_name.join(' & ')}</p>
+          {/*     <div>Author alternative name:{props.book.author_alternative_name.join(' & ')}</div> */}
+          <p className="book--publisher">
+            Publishers:
+            {props.book.publisher
+              ? props.book.publisher.join(', ')
+              : 'none available'}
+          </p>
+          <p>
+            Available Languages:{' '}
+            {props.book.language
+              ? props.book.language.join(', ')
+              : 'none available'}
+          </p>
+          <p className="book--subjects">
+            Subjects :{' '}
+            {props.book.subject
+              ? props.book.subject.join(', ')
+              : 'none available'}
+          </p>
         </div>
       );
   }
-  //console.log(books.docs);
+
+  function handleSearch(ss) {
+    ss = ss.replace(/ /g, '+')
+    console.log(ss);
+    fetch('https://openlibrary.org/search.json?title=' + ss)
+      .then((response) => response.json())
+      .then((data) => setBooks(data.docs.slice(0, 30)));
+  }
+
+  //TO-DO om jag har tid: gör om sökrutans värde till statevariabel.
   return (
     <div>
       <h1>Book search!</h1>
       <p>See books below</p>
+      <input 
+        className="searchBox"
+        type="text"
+        placeholder="Text"
+        id="searchBox"
+      ></input>
+      <button
+        type="submit"
+        onClick={() => handleSearch(document.getElementById('searchBox').value)}
+      >
+        SEARCH
+      </button>
+
       <BookDetails book={activeBook} />
-      <table>
+      <table className="Resulttable">
         <tr>
           <th>Item </th>
           <th>Title </th>
